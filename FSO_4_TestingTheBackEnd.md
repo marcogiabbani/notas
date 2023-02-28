@@ -20,8 +20,9 @@ We also added the runInBand option to the npm script that executes the tests. Th
 
 There is a slight issue in the way that we have specified the mode of the application in our scripts: it will not work on Windows. We can correct this by installing the cross-env package as a development dependency with the command:
 
-```
+```bash
 npm install --save-dev cross-env
+
 ```
 We can then achieve cross-platform compatibility by using the cross-env library in our npm scripts defined in package.json:
 
@@ -52,6 +53,93 @@ npm install --save-dev supertest
 ```
 > **Leí y copié todo el código se 'Supertest', pero no agregué nada a esta nota ni rellene la base de datos de prueba**
 
+<br>
+
+
+## Initializing the database before tests
+
+Let's initialize the database before every test with the beforeEach function and modify the tests:
+
+```js
+  const mongoose = require('mongoose')
+  const supertest = require('supertest')
+  const app = require('../app')
+  const api = supertest(app)
+  const Note = require('../models/note')
+
+  const initialNotes = [
+    {    
+      content: 'HTML is easy',
+      important: false,  },
+    {    
+      content: 'Browser can execute only JavaScript',    
+      important: true,  
+    },
+  ]
+
+  beforeEach(async () => {  
+    await Note.deleteMany({})  
+    let noteObject = new Note(initialNotes[0])  
+    await noteObject.save()  
+    noteObject = new Note(initialNotes[1])  
+    await noteObject.save()
+  })
+
+  test('all notes are returned', async () => {
+    const response = await api.get('/api/notes')
+    expect(response.body).toHaveLength(initialNotes.length)
+  })
+
+  test('a specific note is within the returned notes', async () => {
+    const response = await api.get('/api/notes')
+    const contents = response.body.map(r => r.content) 
+    expect(contents).toContain('Browser can execute only JavaScript')
+  })
+
+  afterAll(async () => {
+    await mongoose.connection.close()
+  })  
+
+```
+
+<br>
+
+## Running tests one by one
+By folder, description or block:
+```shell
+$  # by file
+$  npm test -- tests/note_api.test.js 
+$  # by name or block description
+$  npm test -- -t "a specific note is within the returned notes" 
+$  # by partial name
+$  npm test -- -t 'notes'
+
+``` 
+
+### Tengo que hacer lo siguiente:
+
+1. Modelo de notas
+2. Controller de notas
+3. Importar notasRouter a app.js
+4. Prbar que funcione el alta, baja y consulta.
+5. Elaborar el archivo de tests para las notras.
+6. Refactorizar el archivo de tests para blogs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <br>
@@ -64,10 +152,9 @@ npm install --save-dev supertest
 <br>
 <br>
 <br>
-<br>
 
 
-```shel
+```shell
 
 ```
 ```json
