@@ -2,7 +2,7 @@
 
 Just type and follow steps: 
 ```
-    npm create vite@latest
+npm create vite@latest
 ```
 <br>
 
@@ -18,9 +18,9 @@ npm init @eslint/config
 {
     "env": {
         "browser": true,
-        "commonjs": true,
+        "commonjs": true, //gets module exports
         "es2021": true,
-        "node": true, //gets module exports
+        "node": true, 
         "jest": true //for jest library
     },
     "extends": "eslint:recommended",
@@ -50,7 +50,10 @@ npm init @eslint/config
         "arrow-spacing": [
             "error", { "before": true, "after": true }
         ],
-        "no-console": 0
+        "no-console": 0,
+        "max-len": ["error", { "code": 80 }],
+        "multiline-ternary": ["error", "always"],
+        "no-multi-spaces": "error"
     }
 }
 ```
@@ -62,10 +65,10 @@ npm init @eslint/config
 Just type and follow steps: 
 ```
 npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init
+npx tailwindcss init -p
 ```
 
-Some optional config:
+Some config:
 
 ```js
 /** @type {import('tailwindcss').Config} */
