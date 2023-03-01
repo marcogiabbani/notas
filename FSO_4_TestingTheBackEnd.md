@@ -116,15 +116,6 @@ $  npm test -- -t 'notes'
 
 ``` 
 
-### Tengo que hacer lo siguiente:
-
-1. Modelo de notas
-2. Controller de notas
-3. Importar notasRouter a app.js
-4. Prbar que funcione el alta, baja y consulta.
-5. Elaborar el archivo de tests para las notras.
-6. Refactorizar el archivo de tests para blogs
-
 
 
 
