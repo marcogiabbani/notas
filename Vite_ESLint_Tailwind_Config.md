@@ -51,7 +51,7 @@ npm init @eslint/config
             "error", { "before": true, "after": true }
         ],
         "no-console": 0,
-        "max-len": ["error", { "code": 80 }],
+        "max-len": ["error", { "code": 80 }, {"ignoreStrings": true}],
         "multiline-ternary": ["error", "always"],
         "no-multi-spaces": "error"
     }
