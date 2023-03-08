@@ -1,4 +1,6 @@
-# Test environment
+# Testing the backend
+
+## Test environment
 
 It is common practice to define separate modes for development and testing.
 ```json
@@ -115,29 +117,84 @@ $  # by partial name
 $  npm test -- -t 'notes'
 
 ``` 
+<br>
 
+## <u> **Eliminate try-catch** </u>
+ ```shell
+npm install express-async-errors
+``` 
+Require it in app.js file
+ ```js
+const config = require('./utils/config')
+const express = require('express')
+require('express-async-errors')const
+app = express()
+const cors = require('cors')
+const notesRouter = require('./controllers/notes')
+const middleware = require('./utils/middleware')
+const logger = require('./utils/logger')
+const mongoose = require('mongoose')
 
+// ...
 
+module.exports = app
+``` 
 
+<u> **Now the magic happpens:** </u>
 
+ ```js
+notesRouter.delete('/:id', async (request, response, next) => {
+  try {
+    await Note.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+  } catch (exception) {
+    next(exception)
+  }
+})
+```
 
+&emsp;&emsp;&emsp;&emsp;&emsp;becomes:
 
+ ```js
+notesRouter.delete('/:id', async (request, response) => {
+  await Note.findByIdAndRemove(request.params.id)
+  response.status(204).end()
+})
+```
 
+> Because of the library, we do not need the next(exception) call anymore. The library handles everything under the hood. If an exception occurs in an async route, the execution is automatically passed to the error handling middleware.
 
+> ***What if I want some special thing happening in case of an error? may I over-write this library work with a simple next in mu route??***
 
+<br>
 
+## Promise-all
 
+We want to optimize the data load to the database before running tests, but a `forEach()` function causes some trouble due to JS asynchronous nature. So we opt for `Promise.all` method:
 
+```js
+beforeEach(async () => {
+  await Note.deleteMany({})
 
+  const noteObjects = helper.initialNotes
+    .map(note => new Note(note))
+  const promiseArray = noteObjects.map(note => note.save())
+  await Promise.all(promiseArray)
+})
+```
+
+<br>
+
+## Refactoring tests
 
 
 
 
 <br>
-<br>
-<br>
-<br>
-<br>
+
+
+# User Administration
+
 <br>
 <br>
 <br>
