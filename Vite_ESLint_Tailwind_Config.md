@@ -51,9 +51,21 @@ npm init @eslint/config
             "error", { "before": true, "after": true }
         ],
         "no-console": 0,
-        "max-len": ["error", { "code": 80 }, {"ignoreStrings": true}],
-        "multiline-ternary": ["error", "always"],
-        "no-multi-spaces": "error"
+        "max-len": [
+          "error", { "code": 80 }, {"ignoreStrings": true}
+        ],
+        "multiline-ternary": [
+          "error", "always"
+        ],
+        "no-multi-spaces": "error",
+        "object-curly-newline": [
+          "error", {
+            "ObjectExpression": "always",
+            "ObjectPattern": { "multiline": true, "minProperties": 3 },
+            "ImportDeclaration": { "multiline": true, "minProperties": 3 },
+            "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+          }
+        ] 
     }
 }
 ```
